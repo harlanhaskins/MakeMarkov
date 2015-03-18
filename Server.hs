@@ -20,6 +20,7 @@ import Data.List
 import Data.String.Utils
 import Servant
 import MakeMarkov
+import System.Environment
 
 data Character = Character
   { name    :: String
@@ -27,6 +28,17 @@ data Character = Character
   } deriving Generic
 
 toPath = map toLower . replace " " "-"
+
+imagePath :: Character -> String
+imagePath = relativePath "image.png"
+
+corpusPath :: Character -> String
+corpusPath = relativePath "corpus.txt"
+
+relativePath component character = "characters/" ++ (toPath . name) character ++ "/" ++ component
+
+readCorpus :: Character -> IO String
+readCorpus = readFile . corpusPath
 
 -- JSON instances
 instance FromJSON Character where
